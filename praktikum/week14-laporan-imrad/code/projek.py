@@ -1,40 +1,53 @@
-def detect_deadlock(processes, wait_for):
-    visited = set()
-    stack = set()
+def deadlock_detection(available, allocation, request):
+    n_process = len(allocation)
+    n_resource = len(available)
 
-    def dfs(p):
-        if p in stack:
-            return True
-        if p in visited:
-            return False
+    work = available.copy()
+    finish = [False] * n_process
 
-        visited.add(p)
-        stack.add(p)
+    while True:
+        found = False
+        for i in range(n_process):
+            if not finish[i]:
+                if all(request[i][j] <= work[j] for j in range(n_resource)):
+                    # Proses bisa dieksekusi
+                    for j in range(n_resource):
+                        work[j] += allocation[i][j]
+                    finish[i] = True
+                    found = True
 
-        for q in wait_for.get(p, []):
-            if dfs(q):
-                return True
+        if not found:
+            break
 
-        stack.remove(p)
-        return False
+    deadlock_process = []
+    for i in range(n_process):
+        if not finish[i]:
+            deadlock_process.append(f"P{i}")
 
-    for p in processes:
-        if dfs(p):
-            return True
-
-    return False
+    return deadlock_process
 
 
-# ====== CONTOH PEMANGGILAN ======
-processes = ["P1", "P2", "P3"]
+# ===== DATA UJI =====
+available = [1, 1, 0]
 
-wait_for = {
-    "P1": ["P2"],
-    "P2": ["P1"],
-    "P3": []
-}
+allocation = [
+    [0, 1, 0],  # P0
+    [2, 0, 0],  # P1
+    [3, 0, 3],  # P2
+    [2, 1, 1]   # P3
+]
 
-if detect_deadlock(processes, wait_for):
-    print("DEADLOCK TERDETEKSI")
+request = [
+    [0, 0, 0],  # P0
+    [1, 0, 1],  # P1
+    [0, 0, 1],  # P2
+    [0, 0, 0]   # P3
+]
+
+# ===== EKSEKUSI =====
+deadlock = deadlock_detection(available, allocation, request)
+
+if deadlock:
+    print("Deadlock terdeteksi pada proses:", ", ".join(deadlock))
 else:
-    print("TIDAK TERJADI DEADLOCK")
+    print("Tidak terjadi deadlock, semua proses dapat diselesaikan.")

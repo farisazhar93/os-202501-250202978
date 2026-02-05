@@ -2,6 +2,10 @@
 # Laporan Praktikum Minggu 14
 Topik: Penyusunan Laporan Praktikum Format IMRAD
 
+Deadlock Detection pada Sistem Operasi
+
+Praktikum ini membahas penerapan algoritma deadlock detection pada sistem operasi untuk mengidentifikasi proses-proses yang terlibat dalam kondisi deadlock berdasarkan data alokasi dan permintaan sumber daya. Pengujian dilakukan dengan mensimulasikan kondisi sistem menggunakan matriks sumber daya dan mengevaluasi apakah seluruh proses dapat dieksekusi hingga selesai atau tidak.
+
 ---
 
 ## Identitas
@@ -12,26 +16,21 @@ Topik: Penyusunan Laporan Praktikum Format IMRAD
 ---
 
 ## Tujuan
-Tuliskan tujuan praktikum minggu ini.  
-Contoh:  
-> Mahasiswa mampu menjelaskan fungsi utama sistem operasi dan peran kernel serta system call.
+Setelah menyelesaikan tugas ini, mahasiswa mampu:
+1. Menyusun laporan praktikum dengan struktur ilmiah (Pendahuluan–Metode–Hasil–Pembahasan–Kesimpulan).
+2. Menyajikan hasil uji dalam bentuk tabel dan/atau grafik yang jelas.
+3. Menuliskan analisis hasil dengan argumentasi yang logis.
+4. Menyusun sitasi dan daftar pustaka dengan format yang konsisten.
+5. Mengunggah draft laporan ke repositori dengan rapi dan tepat waktu.
 
 ---
 
 ## Dasar Teori
-Deadlock adalah kondisi kebuntuan pada sistem operasi yang terjadi ketika sekumpulan proses tidak dapat melanjutkan eksekusi karena masing-masing proses menunggu sumber daya yang sedang digunakan oleh proses lain.
+Deadlock adalah kondisi pada sistem operasi ketika dua atau lebih proses saling menunggu sumber daya yang sedang digunakan oleh proses lain, sehingga tidak ada proses yang dapat melanjutkan eksekusi. Deadlock dapat terjadi apabila empat kondisi terpenuhi secara bersamaan, yaitu mutual exclusion, hold and wait, no preemption, dan circular wait.
 
-Menurut teori sistem operasi, deadlock dapat terjadi jika empat kondisi Coffman terpenuhi secara bersamaan:
+Salah satu cara penanganan deadlock adalah deadlock detection, yaitu dengan membiarkan deadlock terjadi, kemudian mendeteksinya menggunakan algoritma tertentu. Algoritma deadlock detection memanfaatkan available vector, allocation matrix, dan request matrix untuk menentukan apakah suatu proses dapat dieksekusi dengan sumber daya yang tersedia.
 
-Mutual Exclusion: sumber daya tidak dapat digunakan bersama.
-
-Hold and Wait: proses menahan resource sambil menunggu resource lain.
-
-No Preemption: resource tidak dapat diambil paksa.
-
-Circular Wait: terdapat siklus proses yang saling menunggu.
-
-Salah satu metode untuk mendeteksi deadlock adalah menggunakan Wait-For Graph (WFG). Pada grafik ini, simpul merepresentasikan proses, dan sisi berarah menunjukkan bahwa suatu proses sedang menunggu proses lain. Jika pada WFG ditemukan siklus, maka sistem berada dalam kondisi deadlock.
+Proses yang permintaannya dapat dipenuhi akan dieksekusi dan sumber dayanya dilepaskan kembali. Jika terdapat proses yang tidak pernah dapat dieksekusi, maka proses tersebut dinyatakan berada dalam kondisi deadlock. Pendekatan ini penting untuk membantu sistem operasi mengidentifikasi masalah pengelolaan sumber daya dan menjaga stabilitas sistem.
 ---
 
 ## Langkah Praktikum
@@ -79,14 +78,34 @@ dmesg | head
 
 ## Hasil Eksekusi
 Sertakan screenshot hasil percobaan atau diagram:
-![Screenshot hasil](screenshots/deadlock_result.png)
+![Screenshot hasil](screenshots/deadlock.png)
+
+Dari hasil pengujian, terlihat bahwa tidak semua proses dapat diselesaikan, sehingga sistem terdeteksi berada dalam kondisi deadlock.
 
 ---
 
 ## Analisis
-- Jelaskan makna hasil percobaan.  
-- Hubungkan hasil dengan teori (fungsi kernel, system call, arsitektur OS).  
-- Apa perbedaan hasil di lingkungan OS berbeda (Linux vs Windows)?  
+Tabel Hasil Deteksi Deadlock
+
+Tabel 1. Hasil Deteksi Deadlock
+
+**Tabel 1. Status Proses pada Deadlock Detection**
+
+| Proses | Allocation | Request | Status   |
+|--------|------------|---------|----------|
+| P0     | Terpenuhi  | 0       | Selesai  |
+| P1     | Sebagian   | > Work  | Deadlock |
+| P2     | Sebagian   | > Work  | Deadlock |
+| P3     | Terpenuhi  | 0       | Selesai  |
+
+Pembahasan (Discussion)
+
+Hasil praktikum menunjukkan bahwa algoritma deadlock detection berhasil mengidentifikasi proses-proses yang tidak dapat dieksekusi karena kekurangan sumber daya. Proses P1 dan P2 berada dalam kondisi deadlock karena permintaan sumber daya mereka tidak dapat dipenuhi oleh sumber daya yang tersedia.
+
+Hal ini sesuai dengan teori deadlock, di mana kondisi circular wait menyebabkan proses saling menunggu satu sama lain. Algoritma deadlock detection membantu sistem untuk mengenali kondisi tersebut tanpa harus mencegah deadlock sejak awal.
+
+Keterbatasan praktikum ini adalah penggunaan data uji yang bersifat statis. Pada sistem nyata, kondisi sumber daya bersifat dinamis dan membutuhkan mekanisme tambahan untuk pemulihan deadlock (deadlock recovery).
+
 
 ---
 
@@ -102,12 +121,14 @@ Hasil eksperimen sesuai dengan teori deadlock pada sistem operasi.
 ---
 
 ## Quiz
-1. [Pertanyaan 1]  
-   **Jawaban:**  
-2. [Pertanyaan 2]  
-   **Jawaban:**  
-3. [Pertanyaan 3]  
-   **Jawaban:**  
+1.Mengapa format IMRAD membantu membuat laporan praktikum lebih ilmiah dan mudah dievaluasi?
+Karena IMRAD menyusun laporan secara sistematis mulai dari pendahuluan hingga kesimpulan, sehingga alur eksperimen mudah dipahami dan dievaluasi.
+
+2.Apa perbedaan antara bagian Hasil dan Pembahasan?
+Bagian Hasil menyajikan data secara objektif, sedangkan Pembahasan menjelaskan dan menganalisis makna dari data tersebut.
+
+3.Mengapa sitasi dan daftar pustaka penting, bahkan untuk laporan praktikum?
+Karena sitasi menunjukkan dasar teori yang digunakan dan meningkatkan kredibilitas ilmiah laporan.
 
 ---
 
